@@ -5,6 +5,7 @@
 ### Module 1: Introduction to CRM
 - [1.1 What is CRM?](#11-what-is-crm)
 - [1.2 Setup CRM Account](#12-setup-crm-account)
+- [1.3 Setup Sandbox](#13-setup-sandbox-for-development)
 
 ### Module 2: Core Data Components
 - [2.1 Modules](#21-modules)
@@ -125,6 +126,7 @@ A CRM system provides:
 - [Understanding the CRM Interface](https://help.zoho.com/portal/en/kb/crm/getting-started/articles/understand-crm-account#Key_CRM_Terminologies)
 
 
+
 ### Initial Setup and Navigation
 - Objective: Familiarize yourself with the Enterprise interface and personal settings.
 - Access the System: Log in to your Zoho CRM Enterprise account.
@@ -132,6 +134,44 @@ A CRM system provides:
 - Personalize: Navigate to Setup > General > Personal Settings. Configure your locale, time zone, and language. This is critical as automation rules often rely on the system time zone.3
 - Explore Modules: Click through the standard tabs (Leads, Contacts, Accounts) to observe the default list views.
 
+
+## 1.3 Setup Sandbox for Development
+- Zoho CRM Sandbox is a secure, isolated testing environment that enables administrators and developers to test customizations, workflows, and configurations without risking production data.
+
+### What Sandbox does and why it matters
+
+Sandbox creates a parallel version of your CRM where teams can safely experiment with configurations. Think of it as a laboratory for your CRM—changes made here affect only the test environment until you explicitly deploy them to production.
+
+**The core problems Sandbox addresses:**
+
+- **Risk mitigation**: Untested changes can break workflows, corrupt data, or disrupt sales operations. Sandbox eliminates this risk entirely.
+- **Developer collaboration**: Third-party developers can build and test customizations without ever accessing live customer data.
+- **Quality assurance**: Teams can thoroughly validate complex automations before they touch production records.
+- **Change management**: A unified deployment log tracks every modification pushed to production, creating a complete audit trail.
+
+Zoho offers **two sandbox types**. Configuration-only sandboxes copy your CRM setup without data—ideal for testing layout changes and workflow logic. Configuration-and-data sandboxes include actual records, either **10 sample records per module** or a user-specified subset of production data for realistic testing scenarios.
+
+### Step-by-step sandbox creation process
+
+Creating a sandbox requires Administrator profile permissions. The process takes just a few minutes but involves several important decisions.
+
+**To create your first sandbox:**
+
+Please go through this link - [Zoho CRM Sandbox Tutorial](https://www.youtube.com/watch?v=FfMFLTHRvWs)
+
+1. Navigate to **Setup** (gear icon) → **Data Administration** → **Sandbox**
+2. Click **Create Sandbox** or **Create New Sandbox**
+3. Enter a descriptive name (e.g., "Q1 Workflow Testing" or "API Integration Dev")
+4. Add an optional description identifying the sandbox purpose
+5. Select sandbox type: **Configuration** or **Configuration and Data**
+6. If choosing Configuration and Data, select either Sample Data (10 records/module) or Partial Data (specify record count)
+7. In the **Items Availability in Sandbox** window, choose **All** to copy everything or **Selected** to import only specific feature configurations
+8. Assign CRM users who need sandbox access
+9. Click **Create** to provision the environment
+
+The system generates a custom URL automatically based on your sandbox name. Access follows the format `https://crmsandbox.zoho.com/crm/{sandbox_name}`. A prominent **gold "Sandbox" ribbon** appears at the top of the interface whenever you're working in a test environment, preventing accidental confusion with production.
+
+- From now onwards , Use the sandbox to make changes to your crm account 
 
 # Module 2: Core Data Components
 
