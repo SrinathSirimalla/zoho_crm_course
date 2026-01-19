@@ -67,6 +67,18 @@
 - [8.12 Best Practices](#812-best-practices)
 - [8.13 Troubleshooting](#813-troubleshooting)
 
+### Module 9: Connecting Zoho CRM to External APIs
+- [9.1 Introduction to Zoho CRM API](#91-introduction-to-zoho-crm-api)
+- [9.2 OAuth 2.0 Authentication](#92-oauth-20-authentication)
+- [9.3 Registering Your Application](#93-registering-your-application)
+- [9.4 Access and Refresh Tokens](#94-access-and-refresh-tokens)
+- [9.5 API Scopes](#95-api-scopes)
+- [9.6 Making API Calls](#96-making-api-calls)
+- [9.7 Core API Operations](#97-core-api-operations)
+- [9.8 Webhooks for External Integration](#98-webhooks-for-external-integration)
+- [9.9 API Rate Limits and Credits](#99-api-rate-limits-and-credits)
+- [9.10 Best Practices and Troubleshooting](#910-best-practices-and-troubleshooting)
+
 
 ## 1.1 What is CRM?
 
@@ -6561,3 +6573,1138 @@ data = Map();
 data.put("key", "value");
 value = data.get("key");
 ```
+
+---
+
+# Module 9: Connecting Zoho CRM to External APIs
+
+## Learning Objectives
+
+By the end of this module, you will be able to:
+
+- Understand the Zoho CRM REST API architecture
+- Implement OAuth 2.0 authentication for API access
+- Register applications in the Zoho Developer Console
+- Generate and manage access and refresh tokens
+- Configure appropriate API scopes for your integration
+- Perform CRUD operations using the API
+- Set up webhooks for real-time external integrations
+- Manage API rate limits and credits effectively
+
+---
+
+## 9.1 Introduction to Zoho CRM API
+
+### What is the Zoho CRM API?
+
+The Zoho CRM API is a RESTful interface that allows external applications to interact with your CRM data programmatically. It enables you to build integrations, automate workflows, and connect Zoho CRM with virtually any third-party application.
+
+### API Versions
+
+Zoho CRM currently supports API version 8 (v8), which offers enhanced features and improved performance over previous versions.
+
+| API Version | Status | Base URL |
+|-------------|--------|----------|
+| V8 | Current | `https://www.zohoapis.com/crm/v8/` |
+| V7 | Supported | `https://www.zohoapis.com/crm/v7/` |
+| V6 | Legacy | `https://www.zohoapis.com/crm/v6/` |
+
+### API Categories
+
+The Zoho CRM API is organized into several categories:
+
+| Category | Purpose |
+|----------|---------|
+| **Metadata APIs** | Fetch metadata of modules, fields, layouts, custom views, and related lists |
+| **Core APIs** | Perform CRUD operations on CRM module entities |
+| **Composite API** | Combine up to five API calls in a single request |
+| **Bulk APIs** | Push and retrieve data in bulk using asynchronous APIs |
+| **Notification APIs** | Get notified when data changes occur in CRM |
+| **Query APIs (COQL)** | Fetch records using SQL-like SELECT queries |
+
+### Why Use the API?
+
+Common use cases for the Zoho CRM API include:
+
+- **Data Synchronization**: Keep CRM data in sync with other business systems (ERP, accounting, marketing automation)
+- **Custom Applications**: Build custom web or mobile applications that interact with CRM data
+- **Automated Data Entry**: Import leads from websites, forms, or other sources automatically
+- **Reporting**: Extract data for custom analytics and reporting
+- **Process Automation**: Trigger actions in external systems based on CRM events
+
+### Further Reading
+
+- [Zoho CRM API V8 Documentation](https://www.zoho.com/crm/developer/docs/api/v8/)
+- [Zoho Developer Hub](https://www.zoho.com/developer-hub/)
+
+---
+
+## 9.2 OAuth 2.0 Authentication
+
+### Overview
+
+Zoho CRM uses OAuth 2.0 protocol for authentication. OAuth 2.0 is an industry-standard protocol that enables third-party applications to gain delegated access to protected resources without requiring users to share their credentials.
+
+### Benefits of OAuth 2.0
+
+| Benefit | Description |
+|---------|-------------|
+| **No Password Storage** | Applications don't need to store user passwords |
+| **Delegated Access** | Access only resources authorized by the user |
+| **Revocable** | Users can revoke access at any time |
+| **Token Expiration** | Access tokens expire, limiting exposure in case of breach |
+| **Scoped Access** | Control exactly what resources an application can access |
+
+### Key OAuth Terminology
+
+| Term | Definition |
+|------|------------|
+| **Resource** | CRM data like Leads, Contacts, Deals, etc. |
+| **Resource Server** | Zoho CRM server hosting protected resources |
+| **Client** | Your application requesting access |
+| **Authorization Server** | Zoho Accounts server that issues tokens |
+| **Access Token** | Short-lived token to access protected resources |
+| **Refresh Token** | Long-lived token to obtain new access tokens |
+| **Grant Token** | One-time code exchanged for tokens (valid for 2 minutes) |
+| **Scope** | Permissions defining what resources can be accessed |
+
+### Authentication Flow Overview
+
+```
+┌─────────────────┐      ┌─────────────────┐      ┌─────────────────┐
+│   Your App      │      │  Zoho Accounts  │      │   Zoho CRM      │
+└────────┬────────┘      └────────┬────────┘      └────────┬────────┘
+         │                        │                        │
+         │  1. Authorization      │                        │
+         │     Request            │                        │
+         │───────────────────────>│                        │
+         │                        │                        │
+         │  2. User Login &       │                        │
+         │     Consent            │                        │
+         │<───────────────────────│                        │
+         │                        │                        │
+         │  3. Grant Token        │                        │
+         │<───────────────────────│                        │
+         │                        │                        │
+         │  4. Exchange for       │                        │
+         │     Access Token       │                        │
+         │───────────────────────>│                        │
+         │                        │                        │
+         │  5. Access + Refresh   │                        │
+         │     Tokens             │                        │
+         │<───────────────────────│                        │
+         │                        │                        │
+         │  6. API Request with   │                        │
+         │     Access Token       │                        │
+         │─────────────────────────────────────────────────>
+         │                        │                        │
+         │  7. CRM Data           │                        │
+         │<─────────────────────────────────────────────────
+         │                        │                        │
+```
+
+### Data Center URLs
+
+Zoho has multiple data centers. Use the appropriate URL based on your account's location:
+
+| Data Center | Accounts URL | API Domain |
+|-------------|--------------|------------|
+| US | `https://accounts.zoho.com` | `https://www.zohoapis.com` |
+| EU | `https://accounts.zoho.eu` | `https://www.zohoapis.eu` |
+| India | `https://accounts.zoho.in` | `https://www.zohoapis.in` |
+| Australia | `https://accounts.zoho.com.au` | `https://www.zohoapis.com.au` |
+| Japan | `https://accounts.zoho.jp` | `https://www.zohoapis.jp` |
+| China | `https://accounts.zoho.com.cn` | `https://www.zohoapis.com.cn` |
+| Canada | `https://accounts.zohocloud.ca` | `https://www.zohoapis.ca` |
+
+**Important**: Always use the same data center URL consistently throughout the authentication process.
+
+---
+
+## 9.3 Registering Your Application
+
+### Step 1: Access the Developer Console
+
+1. Go to [Zoho API Console](https://api-console.zoho.com/)
+2. Sign in with your Zoho account
+3. Click **GET STARTED** if this is your first time
+
+### Step 2: Choose Client Type
+
+Zoho supports different client types based on your application architecture:
+
+| Client Type | Use Case | Redirect Required |
+|-------------|----------|-------------------|
+| **Server-based** | Web applications with backend servers | Yes |
+| **Self Client** | Server-to-server integrations, scripts, testing | No |
+| **Client-based** | JavaScript/browser-only applications | Yes |
+| **Mobile** | iOS/Android mobile applications | Yes |
+| **Device** | IoT devices, smart TVs, printers | No |
+
+### Step 3: Register a Server-Based Application
+
+For most integrations, use **Server-based** client type:
+
+1. Click **ADD CLIENT** > **Server-based Applications**
+2. Fill in the required details:
+
+| Field | Description | Example |
+|-------|-------------|---------|
+| **Client Name** | Your application name | `TurboFix Integration` |
+| **Homepage URL** | Your application's home page | `https://turbofix.example.com` |
+| **Authorized Redirect URI** | URL to receive authorization code | `https://turbofix.example.com/oauth/callback` |
+
+3. Click **CREATE**
+4. Save the **Client ID** and **Client Secret** securely
+
+### Step 4: Register a Self Client (For Testing/Scripts)
+
+For quick testing or server-to-server integrations without user interaction:
+
+1. Click **ADD CLIENT** > **Self Client**
+2. Enter a client name
+3. Click **CREATE**
+4. Save the Client ID and Client Secret
+
+### Security Best Practices
+
+- **Never expose Client Secret** in client-side code (HTML, JavaScript)
+- **Store credentials securely** using environment variables or secret management services
+- **Use HTTPS** for all redirect URIs
+- **Rotate secrets** periodically if you suspect compromise
+
+### Common Registration Errors
+
+| Error | Cause | Solution |
+|-------|-------|----------|
+| Invalid client name | Special characters used | Use only alphanumeric, underscore (_), and ampersand (&) |
+| Invalid redirect URI | Missing protocol | Include `http://` or `https://` |
+| Invalid JavaScript domain | Wrong format | Must start with `http://` or `https://` |
+
+---
+
+## 9.4 Access and Refresh Tokens
+
+### Generating the Authorization Code (Grant Token)
+
+#### For Server-Based Applications
+
+Construct the authorization URL and redirect users to it:
+
+```
+https://accounts.zoho.com/oauth/v2/auth?
+  scope=ZohoCRM.modules.ALL&
+  client_id={your_client_id}&
+  response_type=code&
+  access_type=offline&
+  redirect_uri={your_redirect_uri}
+```
+
+**Parameters**:
+
+| Parameter | Required | Description |
+|-----------|----------|-------------|
+| `scope` | Yes | Permissions requested (see Section 9.5) |
+| `client_id` | Yes | Your application's Client ID |
+| `response_type` | Yes | Must be `code` |
+| `access_type` | Yes | `offline` for refresh token, `online` for access only |
+| `redirect_uri` | Yes | Must match registered redirect URI |
+| `state` | No | Optional CSRF protection parameter |
+
+When the user approves, Zoho redirects to your URI with the grant token:
+
+```
+https://turbofix.example.com/oauth/callback?code=1000.abc123xyz...
+```
+
+**Important**: The grant token is valid for only **2 minutes**.
+
+#### For Self Client (No User Interaction)
+
+1. Go to the API Console
+2. Select your Self Client
+3. Click **Generate Code**
+4. Enter the required scope (e.g., `ZohoCRM.modules.ALL`)
+5. Select **Time Duration** (1-10 minutes)
+6. Click **CREATE**
+7. Copy the generated code immediately
+
+### Exchanging Grant Token for Access Token
+
+Make a POST request to exchange the grant token:
+
+**Endpoint**: `POST https://accounts.zoho.com/oauth/v2/token`
+
+**Request (as form-data)**:
+
+```bash
+curl -X POST "https://accounts.zoho.com/oauth/v2/token" \
+  -d "grant_type=authorization_code" \
+  -d "client_id={your_client_id}" \
+  -d "client_secret={your_client_secret}" \
+  -d "redirect_uri={your_redirect_uri}" \
+  -d "code={grant_token}"
+```
+
+**Response**:
+
+```json
+{
+  "access_token": "1000.abc123...",
+  "refresh_token": "1000.xyz789...",
+  "api_domain": "https://www.zohoapis.com",
+  "token_type": "Bearer",
+  "expires_in": 3600
+}
+```
+
+**Response Fields**:
+
+| Field | Description |
+|-------|-------------|
+| `access_token` | Token to make API calls (valid for 1 hour) |
+| `refresh_token` | Token to generate new access tokens (long-lived) |
+| `api_domain` | Base URL for API calls |
+| `token_type` | Always "Bearer" |
+| `expires_in` | Seconds until access token expires (3600 = 1 hour) |
+
+### Refreshing Access Tokens
+
+Access tokens expire after 1 hour. Use the refresh token to get a new access token:
+
+**Endpoint**: `POST https://accounts.zoho.com/oauth/v2/token`
+
+```bash
+curl -X POST "https://accounts.zoho.com/oauth/v2/token" \
+  -d "grant_type=refresh_token" \
+  -d "client_id={your_client_id}" \
+  -d "client_secret={your_client_secret}" \
+  -d "refresh_token={your_refresh_token}"
+```
+
+**Response**:
+
+```json
+{
+  "access_token": "1000.new_token...",
+  "api_domain": "https://www.zohoapis.com",
+  "token_type": "Bearer",
+  "expires_in": 3600
+}
+```
+
+**Note**: Refresh tokens do not expire unless revoked. Store them securely.
+
+### Client Credentials Flow (Simplified)
+
+For simpler use cases, use the client credentials flow:
+
+```bash
+curl -X POST "https://accounts.zoho.com/oauth/v2/token" \
+  -d "grant_type=client_credentials" \
+  -d "client_id={your_client_id}" \
+  -d "client_secret={your_client_secret}" \
+  -d "scope={scope}" \
+  -d "soid={organization_id}"
+```
+
+**Note**: This flow does not provide a refresh token.
+
+### Common Token Errors
+
+| Error | Cause | Solution |
+|-------|-------|----------|
+| `invalid_code` | Grant token expired or already used | Generate a new grant token |
+| `invalid_client` | Wrong client ID/secret or DC mismatch | Verify credentials and use correct DC |
+| `invalid_redirect_uri` | Redirect URI mismatch | Use exact URI registered in console |
+
+---
+
+## 9.5 API Scopes
+
+### Understanding Scopes
+
+Scopes define the specific permissions your application requests. They follow a standard format:
+
+```
+{service_name}.{scope_name}.{operation_type}
+```
+
+**Example**: `ZohoCRM.modules.leads.READ`
+
+| Component | Description | Example |
+|-----------|-------------|---------|
+| Service Name | The Zoho service | `ZohoCRM` |
+| Scope Name | Resource type | `modules`, `settings`, `users` |
+| Operation Type | Permission level | `READ`, `CREATE`, `UPDATE`, `DELETE`, `ALL` |
+
+### Common CRM Scopes
+
+#### Module Scopes
+
+| Scope | Permission |
+|-------|------------|
+| `ZohoCRM.modules.ALL` | Full access to all modules |
+| `ZohoCRM.modules.leads.ALL` | Full access to Leads module |
+| `ZohoCRM.modules.contacts.READ` | Read-only access to Contacts |
+| `ZohoCRM.modules.deals.CREATE` | Create access for Deals |
+| `ZohoCRM.modules.custom.ALL` | Access to custom modules |
+
+#### Settings Scopes
+
+| Scope | Permission |
+|-------|------------|
+| `ZohoCRM.settings.ALL` | Full access to all settings |
+| `ZohoCRM.settings.modules.READ` | Read module metadata |
+| `ZohoCRM.settings.fields.READ` | Read field metadata |
+| `ZohoCRM.settings.profiles.READ` | Read profile information |
+
+#### Other Scopes
+
+| Scope | Permission |
+|-------|------------|
+| `ZohoCRM.users.ALL` | Access to user information |
+| `ZohoCRM.org.ALL` | Access to organization data |
+| `ZohoCRM.notifications.ALL` | Manage notification channels |
+| `ZohoCRM.bulk.ALL` | Bulk read/write operations |
+| `ZohoCRM.coql.READ` | Execute COQL queries |
+
+### Multiple Scopes
+
+Combine multiple scopes with commas:
+
+```
+scope=ZohoCRM.modules.leads.ALL,ZohoCRM.modules.contacts.ALL,ZohoCRM.settings.modules.READ
+```
+
+### Scope Best Practices
+
+- **Principle of Least Privilege**: Request only the scopes you need
+- **Granular Permissions**: Use specific module scopes instead of `modules.ALL` when possible
+- **Read vs Write**: If you only need to read data, use `READ` scope
+- **Document Requirements**: Clearly document which scopes your application needs and why
+
+---
+
+## 9.6 Making API Calls
+
+### Request Structure
+
+All Zoho CRM API requests follow this pattern:
+
+**Headers**:
+
+```
+Authorization: Zoho-oauthtoken {access_token}
+Content-Type: application/json
+```
+
+**Base URL**: Use the `api_domain` from your token response (e.g., `https://www.zohoapis.com`)
+
+### Example: Get Records
+
+**Request**:
+
+```bash
+curl -X GET "https://www.zohoapis.com/crm/v8/Leads" \
+  -H "Authorization: Zoho-oauthtoken 1000.abc123..."
+```
+
+**Response**:
+
+```json
+{
+  "data": [
+    {
+      "id": "5725767000000419001",
+      "Company": "Zylker Inc",
+      "First_Name": "John",
+      "Last_Name": "Doe",
+      "Email": "john.doe@zylker.com"
+    }
+  ],
+  "info": {
+    "per_page": 200,
+    "count": 1,
+    "page": 1,
+    "more_records": false
+  }
+}
+```
+
+### Using Deluge (invokeurl)
+
+Within Zoho CRM custom functions, use `invokeurl` to call external APIs:
+
+```deluge
+// Call an external API
+response = invokeurl
+[
+    url: "https://api.example.com/data"
+    type: GET
+    headers: {"Authorization": "Bearer external_token", "Content-Type": "application/json"}
+];
+
+// Parse the response
+data = response.toMap();
+info data;
+
+// Call with POST and body
+postResponse = invokeurl
+[
+    url: "https://api.example.com/create"
+    type: POST
+    headers: {"Authorization": "Bearer external_token", "Content-Type": "application/json"}
+    parameters: {"name": "Test", "value": 123}.toString()
+];
+```
+
+### Using CRM Connections in Deluge
+
+For calling Zoho CRM API from other Zoho apps:
+
+```deluge
+// Using a pre-configured connection
+response = invokeurl
+[
+    url: "https://www.zohoapis.com/crm/v8/Leads"
+    type: GET
+    connection: "crm_oauth_connection"
+];
+
+info response;
+```
+
+### HTTP Methods
+
+| Method | Purpose | Example Endpoint |
+|--------|---------|------------------|
+| `GET` | Retrieve records | `GET /crm/v8/Leads` |
+| `POST` | Create records | `POST /crm/v8/Leads` |
+| `PUT` | Update records | `PUT /crm/v8/Leads` |
+| `DELETE` | Delete records | `DELETE /crm/v8/Leads?ids=123,456` |
+
+---
+
+## 9.7 Core API Operations
+
+### Get Records
+
+Retrieve records from a module:
+
+```bash
+# Get all Leads (paginated)
+GET /crm/v8/Leads
+
+# Get specific fields
+GET /crm/v8/Leads?fields=First_Name,Last_Name,Email
+
+# Pagination
+GET /crm/v8/Leads?page=2&per_page=100
+
+# Sort records
+GET /crm/v8/Leads?sort_by=Created_Time&sort_order=desc
+```
+
+### Get Record by ID
+
+```bash
+GET /crm/v8/Leads/5725767000000419001
+```
+
+### Search Records
+
+Use the Search API with criteria:
+
+```bash
+# Search by email
+GET /crm/v8/Leads/search?email=john@example.com
+
+# Search with criteria
+GET /crm/v8/Leads/search?criteria=(Company:equals:Zylker)
+
+# Multiple criteria with AND
+GET /crm/v8/Leads/search?criteria=((Company:equals:Zylker)and(Lead_Status:equals:Contacted))
+```
+
+### Create Records
+
+```bash
+POST /crm/v8/Leads
+Content-Type: application/json
+
+{
+  "data": [
+    {
+      "Company": "TurboFix Auto Care",
+      "First_Name": "Sarah",
+      "Last_Name": "Johnson",
+      "Email": "sarah@turbofix.com",
+      "Phone": "555-0123",
+      "Lead_Source": "Website"
+    }
+  ]
+}
+```
+
+**Response**:
+
+```json
+{
+  "data": [
+    {
+      "code": "SUCCESS",
+      "details": {
+        "id": "5725767000000420001",
+        "Created_By": {...},
+        "Created_Time": "2024-01-15T10:30:00-08:00"
+      },
+      "message": "record added",
+      "status": "success"
+    }
+  ]
+}
+```
+
+### Update Records
+
+```bash
+PUT /crm/v8/Leads
+Content-Type: application/json
+
+{
+  "data": [
+    {
+      "id": "5725767000000420001",
+      "Lead_Status": "Contacted",
+      "Description": "Interested in premium service package"
+    }
+  ]
+}
+```
+
+### Upsert Records
+
+Create or update based on duplicate check:
+
+```bash
+POST /crm/v8/Leads/upsert
+Content-Type: application/json
+
+{
+  "data": [
+    {
+      "Email": "sarah@turbofix.com",
+      "Lead_Status": "Qualified"
+    }
+  ],
+  "duplicate_check_fields": ["Email"]
+}
+```
+
+### Delete Records
+
+```bash
+DELETE /crm/v8/Leads?ids=5725767000000420001,5725767000000420002
+```
+
+### COQL (CRM Object Query Language)
+
+Execute SQL-like queries:
+
+```bash
+POST /crm/v8/coql
+Content-Type: application/json
+
+{
+  "select_query": "SELECT First_Name, Last_Name, Email FROM Leads WHERE Lead_Status = 'Qualified' LIMIT 100"
+}
+```
+
+**Supported COQL Features**:
+
+- `SELECT` with specific fields
+- `WHERE` with conditions
+- `ORDER BY` for sorting
+- `LIMIT` and `OFFSET` for pagination
+- `IN`, `BETWEEN`, `LIKE` operators
+
+---
+
+## 9.8 Webhooks for External Integration
+
+### What Are Webhooks?
+
+Webhooks allow Zoho CRM to send real-time notifications to external applications when specific events occur (record creation, update, deletion). Unlike polling the API, webhooks push data immediately when changes happen.
+
+### Webhook vs API Polling
+
+| Aspect | Webhooks | API Polling |
+|--------|----------|-------------|
+| Timing | Real-time | Scheduled intervals |
+| Efficiency | Only triggered on events | Constant requests |
+| API Credits | Doesn't consume credits | Consumes credits |
+| Complexity | Requires endpoint setup | Simpler implementation |
+
+### Creating a Webhook via UI
+
+1. Go to **Setup** > **Automation** > **Actions** > **Webhooks**
+2. Click **Configure Webhook**
+3. Fill in the details:
+
+| Field | Description |
+|-------|-------------|
+| Name | Descriptive name for the webhook |
+| URL | External endpoint to receive data |
+| Method | GET, POST, or PUT |
+| Module | Which module triggers the webhook |
+| Parameters | Data to send (CRM fields, custom values) |
+
+### Webhook Configuration Options
+
+**URL Parameters** (for GET requests):
+
+```
+https://api.example.com/webhook?lead_id=${!Leads.Id}&email=${!Leads.Email}
+```
+
+**Body Parameters** (for POST/PUT):
+
+- **Form Data**: Key-value pairs
+- **Raw Data**: JSON, XML, or custom format
+
+**Custom Headers**:
+
+```json
+{
+  "X-API-Key": "your-api-key",
+  "Content-Type": "application/json"
+}
+```
+
+### Creating Webhooks via API
+
+```bash
+POST /crm/v8/settings/automation/webhooks
+Authorization: Zoho-oauthtoken {access_token}
+Content-Type: application/json
+
+{
+  "webhooks": [
+    {
+      "name": "New Lead Notification",
+      "url": "https://api.example.com/new-lead",
+      "method": "POST",
+      "module": {
+        "api_name": "Leads"
+      },
+      "headers": {
+        "custom_parameters": [
+          {
+            "name": "X-API-Key",
+            "value": "your-api-key"
+          }
+        ],
+        "module_parameters": [
+          {
+            "name": "lead_email",
+            "value": "${!Leads.Email}"
+          }
+        ]
+      },
+      "body": {
+        "type": "form_data",
+        "form_data_content": {
+          "module_parameters": [
+            {
+              "name": "lead_name",
+              "value": "${!Leads.Full_Name}"
+            },
+            {
+              "name": "lead_phone",
+              "value": "${!Leads.Phone}"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
+```
+
+### Merge Fields
+
+Use merge fields to include dynamic CRM data:
+
+| Merge Field | Description |
+|-------------|-------------|
+| `${!Module.Field}` | Field value from the record |
+| `${!Leads.Id}` | Record ID |
+| `${!Leads.Owner}` | Record owner |
+| `${!Leads.Created_Time}` | Creation timestamp |
+
+### Associating Webhooks with Workflow Rules
+
+1. Create a Workflow Rule (Setup > Automation > Workflow Rules)
+2. Define trigger conditions
+3. Add **Instant Action** > **Webhook**
+4. Select your configured webhook
+
+### Notification APIs (Alternative to Webhooks)
+
+Use Notification APIs to subscribe to CRM events:
+
+```bash
+POST /crm/v8/actions/watch
+Content-Type: application/json
+
+{
+  "watch": [
+    {
+      "channel_id": "1000000068001",
+      "events": ["Leads.create", "Leads.edit", "Leads.delete"],
+      "channel_expiry": "2024-12-31T23:59:59+05:30",
+      "notify_url": "https://api.example.com/notifications"
+    }
+  ]
+}
+```
+
+---
+
+## 9.9 API Rate Limits and Credits
+
+### Credit-Based System
+
+Zoho CRM API usage is measured in credits. Each API call consumes credits based on the operation:
+
+| API Operation | Credits Consumed |
+|---------------|------------------|
+| Standard API call | 1 credit |
+| Convert Lead | 5 credits |
+| Bulk Read | 10 credits |
+| Bulk Write | 10 credits |
+| File Upload | 5 credits |
+
+### Credit Limits by Edition
+
+| Edition | Base Credits | Per User Bonus |
+|---------|--------------|----------------|
+| Free | 5,000/day | +250/user |
+| Standard | 50,000/day | +250/user |
+| Professional | 75,000/day | +250/user |
+| Enterprise | 100,000/day | +500/user |
+| Ultimate | 100,000/day | +1,000/user |
+
+**Example**: Enterprise with 50 users = 100,000 + (50 × 500) = 125,000 credits/day
+
+### Concurrency Limits
+
+Concurrent requests are limited per edition:
+
+| Edition | Max Concurrent Requests |
+|---------|------------------------|
+| Free | 5 |
+| Standard | 10 |
+| Professional | 15 |
+| Enterprise | 20 |
+| Ultimate | 25 |
+
+### Sub-Concurrency Limits
+
+Certain operations have additional limits:
+
+| Operation | Max Concurrent |
+|-----------|----------------|
+| Convert Lead | 10 |
+| Mass Update | 10 |
+| Bulk Read/Write | 10 |
+
+### Checking API Usage
+
+View your API usage in CRM:
+
+1. Go to **Setup** > **Developer Space** > **APIs**
+2. Check the **Usage** section for daily consumption
+
+### Rate Limit Headers
+
+API responses include rate limit information:
+
+```
+X-RATELIMIT-LIMIT: 100000
+X-RATELIMIT-REMAINING: 99500
+X-RATELIMIT-RESET: 1705363200
+```
+
+### Handling Rate Limits
+
+**HTTP 429 Response** indicates rate limit exceeded:
+
+```json
+{
+  "code": "LIMIT_EXCEEDED",
+  "message": "API limit reached for today",
+  "status": "error"
+}
+```
+
+**Best Practices**:
+
+- Implement exponential backoff for retries
+- Batch operations where possible (up to 100 records per request)
+- Use Bulk APIs for large data operations
+- Cache frequently accessed data
+- Monitor usage and optimize queries
+
+### Deluge Integration Task Credits
+
+API calls made through Deluge integration tasks (e.g., `zoho.crm.searchRecords()`) also consume credits equivalent to the corresponding API call.
+
+---
+
+## 9.10 Best Practices and Troubleshooting
+
+### Security Best Practices
+
+| Practice | Implementation |
+|----------|----------------|
+| **Secure Storage** | Store Client Secret and Refresh Token in environment variables or secret managers |
+| **HTTPS Only** | Always use HTTPS for redirect URIs and API calls |
+| **Token Rotation** | Implement automatic access token refresh before expiry |
+| **Scope Minimization** | Request only necessary scopes |
+| **Audit Logging** | Log API calls for troubleshooting and security auditing |
+
+### Performance Best Practices
+
+```deluge
+// BAD: Multiple API calls
+for each lead in leadIds
+{
+    record = zoho.crm.getRecordById("Leads", lead);
+    // Process record
+}
+
+// GOOD: Batch request
+records = zoho.crm.getRecords("Leads", 1, 200);
+for each record in records
+{
+    // Process record
+}
+```
+
+**Recommendations**:
+
+- Batch creates/updates (up to 100 records per request)
+- Use `fields` parameter to fetch only needed fields
+- Implement caching for static data
+- Use COQL for complex queries instead of multiple API calls
+- Leverage Bulk APIs for large data operations
+
+### Error Handling
+
+**Common HTTP Status Codes**:
+
+| Code | Meaning | Action |
+|------|---------|--------|
+| 200 | Success | Process response |
+| 201 | Created | Record created successfully |
+| 204 | No Content | Delete successful |
+| 400 | Bad Request | Check request format |
+| 401 | Unauthorized | Refresh access token |
+| 403 | Forbidden | Check scopes and permissions |
+| 404 | Not Found | Verify record/module exists |
+| 429 | Rate Limited | Implement backoff and retry |
+| 500 | Server Error | Retry with backoff |
+
+**Example Error Handling in Deluge**:
+
+```deluge
+try
+{
+    response = invokeurl
+    [
+        url: "https://www.zohoapis.com/crm/v8/Leads"
+        type: GET
+        connection: "crm_connection"
+    ];
+    
+    if(response.get("data") != null)
+    {
+        leads = response.get("data");
+        // Process leads
+    }
+    else if(response.get("code") != null)
+    {
+        errorCode = response.get("code");
+        errorMessage = response.get("message");
+        info "API Error: " + errorCode + " - " + errorMessage;
+    }
+}
+catch(e)
+{
+    info "Exception: " + e;
+}
+```
+
+### Common Errors and Solutions
+
+| Error | Cause | Solution |
+|-------|-------|----------|
+| `INVALID_TOKEN` | Access token expired | Refresh the access token |
+| `INVALID_CODE` | Grant token expired | Generate new grant token within 2 minutes |
+| `INVALID_CLIENT` | Wrong Client ID/Secret | Verify credentials in API Console |
+| `NO_PERMISSION` | Insufficient scope | Add required scope and regenerate tokens |
+| `DUPLICATE_DATA` | Record already exists | Use upsert or check before creating |
+| `MANDATORY_NOT_FOUND` | Required field missing | Include all mandatory fields |
+| `INVALID_DATA` | Wrong data format | Check field data types |
+
+### Debugging Tips
+
+1. **Enable Logging**: Log all API requests and responses
+2. **Use Postman**: Test API calls before implementing in code
+3. **Check API Console**: Verify scopes and client configuration
+4. **Validate JSON**: Use JSON validators for request bodies
+5. **Test in Sandbox**: Use Zoho CRM Sandbox for testing (Enterprise+)
+
+### Testing Your Integration
+
+```deluge
+// Test function to verify API connectivity
+testApiConnection = void()
+{
+    try
+    {
+        // Test getting modules metadata
+        response = invokeurl
+        [
+            url: "https://www.zohoapis.com/crm/v8/settings/modules"
+            type: GET
+            connection: "crm_connection"
+        ];
+        
+        if(response.get("modules") != null)
+        {
+            info "API Connection Successful!";
+            info "Available modules: " + response.get("modules").size();
+        }
+        else
+        {
+            info "API Response: " + response;
+        }
+    }
+    catch(e)
+    {
+        info "Connection Failed: " + e;
+    }
+}
+```
+
+---
+
+## Exercises
+
+### Exercise 9.1: OAuth Setup
+
+1. Register a Self Client in the Zoho API Console
+2. Generate a grant token with scope `ZohoCRM.modules.leads.ALL`
+3. Exchange the grant token for access and refresh tokens
+4. Store the tokens securely
+
+### Exercise 9.2: First API Call
+
+Using your access token:
+
+1. Make a GET request to retrieve all Leads
+2. Create a new Lead with Company, First Name, Last Name, and Email
+3. Update the Lead's status to "Contacted"
+4. Verify the changes by fetching the record again
+
+### Exercise 9.3: Webhook Integration
+
+1. Create a webhook that sends Lead data to a test endpoint (use webhook.site for testing)
+2. Configure the webhook with:
+   - Lead Name
+   - Email
+   - Phone
+   - Creation Time
+3. Create a workflow rule to trigger the webhook on Lead creation
+4. Test by creating a new Lead
+
+### Exercise 9.4: Error Handling
+
+Write a Deluge function that:
+
+1. Attempts to fetch a record by ID
+2. Handles the case where the record doesn't exist
+3. Handles authentication errors
+4. Logs all errors appropriately
+
+---
+
+## Knowledge Check
+
+Before completing this module, ensure you can answer:
+
+1. What authentication protocol does Zoho CRM API use?
+
+2. What is the difference between an access token and a refresh token?
+
+3. How long is an access token valid?
+
+4. What is the purpose of API scopes?
+
+5. How do you handle rate limiting in your integration?
+
+6. What is the advantage of using webhooks over API polling?
+
+7. How many records can you create/update in a single API call?
+
+8. What HTTP status code indicates rate limiting?
+
+---
+
+## Summary
+
+In this module, you learned:
+
+- **API Overview**: Zoho CRM provides RESTful APIs for integrating with external applications
+
+- **OAuth 2.0**: The authentication mechanism using Client ID, Client Secret, and tokens
+
+- **Token Management**: How to generate, use, and refresh access tokens
+
+- **Scopes**: Permissions that control what your application can access
+
+- **API Operations**: CRUD operations, searching, and COQL queries
+
+- **Webhooks**: Real-time notifications for CRM events
+
+- **Rate Limits**: Credit-based system and how to optimize API usage
+
+- **Best Practices**: Security, performance, and error handling strategies
+
+**Key Principle**: The Zoho CRM API opens unlimited integration possibilities. Start with clear authentication, use appropriate scopes, handle errors gracefully, and monitor your API usage for a robust integration.
+
+---
+
+## Additional Resources
+
+### Official Documentation
+
+- [Zoho CRM API V8 Documentation](https://www.zoho.com/crm/developer/docs/api/v8/)
+- [OAuth 2.0 Overview](https://www.zoho.com/crm/developer/docs/api/v8/oauth-overview.html)
+- [API Scopes Reference](https://www.zoho.com/crm/developer/docs/api/v8/scopes.html)
+- [Webhook Documentation](https://www.zoho.com/crm/developer/docs/api/v8/create-webhook.html)
+- [API Limits](https://www.zoho.com/crm/developer/docs/api/v8/api-limits.html)
+
+### Tools and Testing
+
+- [Zoho API Console](https://api-console.zoho.com/)
+- [Postman](https://www.postman.com/) - For testing API calls
+- [Webhook.site](https://webhook.site/) - For testing webhooks
+
+### Community Resources
+
+- [Zoho Developer Community](https://help.zoho.com/portal/community/zoho-crm)
+- [Zoho CRM API Directory](https://www.zoho.com/crm/developer/docs/api-directory.html)
