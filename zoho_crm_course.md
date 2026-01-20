@@ -1,73 +1,6 @@
-# Zoho CRM Complete Administration Guide
-
-## Table of Contents
-
-### Module 1: Introduction to CRM
-- [1.1 What is CRM?](#11-what-is-crm)
-- [1.2 Setup CRM Account](#12-setup-crm-account)
-
-### Module 2: Core Data Components
-- [2.1 Modules](#21-modules)
-- [2.2 Fields](#22-fields)
-
-### Module 3: Interface Design & User Experience (UX)
-- [3.1 Layouts](#31-layouts)
-- [3.2 Webforms](#32-webforms)
-- [3.3 Wizards](#33-wizards)
-- [3.4 Validation Rules](#34-validation-rules)
-- [3.5 Views](#35-views)
-
-### Module 4: Security & Governance
-- [4.1 Users](#41-users)
-- [4.2 Roles](#42-roles)
-- [4.3 Profiles](#43-profiles)
-- [4.4 Data Sharing Rules](#44-data-sharing-rules)
-- [4.5 Record Locking Rules](#45-record-locking-rules)
-
-### Module 5: Process Automation
-- [5.1 Blueprints](#51-blueprints)
-- [5.2 Workflows](#52-workflows)
-- [5.3 Schedules](#53-schedules)
-- [5.4 Assignment Rules](#54-assignment-rules)
-- [5.5 Case Escalation Rules](#55-case-escalation-rules)
-- [5.6 Approval Processes](#56-approval-processes)
-- [5.7 Scoring Rules](#57-scoring-rules)
-- [5.8 CommandCenter](#58-commandcenter)
-
-### Module 6: Actions - The Execution Layer
-- [6.1 Understanding Actions](#61-understanding-actions)
-- [6.2 Email Notifications](#62-email-notifications)
-- [6.3 Tasks](#63-tasks)
-- [6.4 Field Updates](#64-field-updates)
-- [6.5 Tags](#65-tags)
-- [6.6 Webhooks](#66-webhooks)
-- [6.7 Custom Functions](#67-custom-functions)
-- [6.8 Other Actions](#68-other-actions)
-
-### Module 7: Advanced Features
-- [7.1 Subforms](#71-subforms)
-- [7.2 Tags](#72-tags)
-- [7.3 Macros](#73-macros)
-- [7.4 Signals](#74-signals)
-- [7.5 Advanced Webforms](#75-advanced-webforms)
-- [7.6 Customer Portal](#76-customer-portal)
-
-### Module 8: Custom Functions and Deluge Scripting
-- [8.1 Introduction to Deluge](#81-introduction-to-deluge)
-- [8.2 Deluge Basics](#82-deluge-basics)
-- [8.3 Control Structures](#83-control-structures)
-- [8.4 Collections: Lists and Maps](#84-collections-lists-and-maps)
-- [8.5 Working with CRM Data](#85-working-with-crm-data)
-- [8.6 String Operations](#86-string-operations)
-- [8.7 Date and Time Operations](#87-date-and-time-operations)
-- [8.8 Error Handling](#88-error-handling)
-- [8.9 Sending Emails](#89-sending-emails)
-- [8.10 HTTP Requests (invokeurl)](#810-http-requests-invokeurl)
-- [8.11 Creating Custom Functions](#811-creating-custom-functions)
-- [8.12 Best Practices](#812-best-practices)
-- [8.13 Troubleshooting](#813-troubleshooting)
 
 
+# Day 1
 ## 1.1 What is CRM?
 
 ### Definition
@@ -102,11 +35,12 @@ A CRM system provides:
 
 ### Further Reading
 
-- [Introduction to Zoho CRM - Online Help](https://help.zoho.com/portal/en/kb/crm/getting-started)
 - [What is CRM? | A guide to CRM software by Zoho CRM](https://www.youtube.com/watch?v=hnEQq7kNFWo)
+- [Introduction to Zoho CRM - Online Help](https://help.zoho.com/portal/en/kb/crm/getting-started)
+
 
 ## 1.2 Setup CRM Account 
-- Please Setup a zoho crm account. Use the belwo link
+- Please Setup a zoho crm account. Use the below link
 - [ How to Use Zoho CRM Free](https://www.youtube.com/watch?v=7i826PTnSqo)
 - Go through the below links
 - [Zoho CRM Home Page Overview](https://help.zoho.com/portal/en/kb/crm/getting-started/articles/home-page)
@@ -116,26 +50,13 @@ A CRM system provides:
 ### Initial Setup and Navigation
 - Objective: Familiarize yourself with the Enterprise interface and personal settings.
 - Access the System: Log in to your Zoho CRM Enterprise account.
-- Locate Setup: Identify the "Setup" icon (crossed wrench and screwdriver) in the top-right corner. This menu is the command center for all administrative tasks discussed in this course.
+- Locate Setup: Identify the "Setup" icon in the top-right corner. This menu is the command center for all administrative tasks discussed in this course.
 - Personalize: Navigate to Setup > General > Personal Settings. Configure your locale, time zone, and language. This is critical as automation rules often rely on the system time zone.3
 - Explore Modules: Click through the standard tabs (Leads, Contacts, Accounts) to observe the default list views.
 
 
-# Module 2: Core Data Components
+## Module 2: Core Data Components
 
-## Learning Objectives
-
-By the end of this module, you will be able to:
-
-- Create and configure custom modules
-- Design effective layouts for different user needs
-- Choose the right field types for different data
-- Create webforms for lead capture
-- Build wizards for guided data entry
-- Implement validation rules for data integrity
-- Create views to filter and display records
-
----
 
 ## Overview
 
@@ -237,38 +158,11 @@ For each module, you can configure:
 - **Related Lists**: Child records display
 - **Module Permissions**: Who can access this module
 
-#### Renaming Modules
 
-You can rename standard modules to match your business terminology:
 
-1. Go to **Setup** > **Customization** > **Modules and Fields**
-2. Hover over the module name
-3. Click the pencil icon
-4. Enter new singular and plural names
-5. Save
-
-**Example**: Rename "Deals" to "Opportunities" or "Job Cards"
-
-### When to Use Custom Modules vs Related Lists
-
-| Scenario | Use Custom Module | Use Related List |
-|----------|-------------------|------------------|
-| Entity needs its own views and reports | Yes | No |
-| Entity has many fields (10+) | Yes | Maybe |
-| Entity is referenced from multiple modules | Yes | No |
-| Simple line items (parts, products) | No | Yes |
-| Entity needs its own workflows | Yes | No |
-
-### Common Mistakes to Avoid
-
-| Mistake | Why It's Bad | Better Approach |
-|---------|--------------|-----------------|
-| Creating a module for every entity | Clutters navigation, maintenance burden | Use subforms or related lists for simple data |
-| Using generic names | Hard to understand later | Use specific business terminology |
-| Not setting singular/plural names | Grammatically incorrect in UI | Always configure both forms |
-| Ignoring module relationships | Data silos, duplicate entry | Plan lookup structure before creating modules |
 
 ### Further Reading
+
 
 - [Modules Overview](https://help.zoho.com/portal/en/kb/crm/modules)
 - [Creating Custom Modules](https://help.zoho.com/portal/en/kb/crm/customization/modules/articles/create-custom-module)
@@ -276,6 +170,7 @@ You can rename standard modules to match your business terminology:
 - [Look up field](https://zenatta.com/lookup-fields-tutorial-for-zoho-crm/)
 - [Customizing Modules](https://help.zoho.com/portal/en/kb/crm/customize-crm-account/customizing-modules)
 
+# Day 2
 ## 2.2 Fields
 
 ### What Are Fields?
@@ -424,7 +319,8 @@ Field: Total Revenue
 ](https://www.youtube.com/watch?v=pUfX_aN0Ndg)
 
 
-# Module 3: Interface Design & User Experience (UX)
+# Day 3
+## Module 3: Interface Design & User Experience (UX)
 
 ## 3.1 Layouts
 
@@ -443,6 +339,8 @@ Different users or scenarios may require different information:
 | Different user roles | Sales sees different fields than Support |
 | Different processes | Insurance claims need different fields than regular sales |
 | Regional differences | Different countries may have different requirements |
+
+Please go through the below links to understand how to create and work with layouts
 
 - [Conditional Layouts - Concept and Benefits](https://help.zoho.com/portal/en/kb/crm/customize-crm-account/customizing-page-layouts/articles/conditional-layouts-concept-and-benefits)
 - [Working with Page Layouts](https://help.zoho.com/portal/en/kb/crm/customize-crm-account/customizing-page-layouts/articles/create-page-layouts)
@@ -537,7 +435,7 @@ Layouts can be assigned to specific profiles, so different users see different l
 
 #### Overview
 
-This document explains how records, layouts, and modules relate to each other in Zoho CRM, and clarifies the common question of whether a record can belong to multiple layouts.
+It is important to understand how records, layouts, and modules relate to each other in Zoho CRM.
 
 ---
 
@@ -641,7 +539,7 @@ Workflow rules and blueprints can be scoped to specific layouts, allowing differ
 
 ---
 
-
+# Day 4
 ## 3.2 Webforms
 
 ### What Are Webforms?
@@ -701,33 +599,6 @@ Webforms are HTML forms generated by Zoho CRM that can be embedded on websites. 
 | **Duplicate Check** | How to handle duplicate submissions |
 | **Captcha** | Prevent spam submissions |
 
-### Embedding Webforms
-
-After creating a webform, you get embed options:
-
-**iFrame Embed**:
-```html
-<iframe src="https://crm.zoho.com/crm/WebFormServeServlet?..." 
-        width="600" height="400"></iframe>
-```
-
-**JavaScript Embed** (recommended):
-```html
-<script type="text/javascript" 
-        src="https://crm.zoho.com/crm/WebFormAnalyticsServe..."></script>
-```
-
-**Source Code**: Complete HTML form code you can customize
-
-### Common Mistakes to Avoid
-
-| Mistake | Why It's Bad | Better Approach |
-|---------|--------------|-----------------|
-| Too many fields | Low completion rate | Only essential fields |
-| No captcha | Spam submissions | Always enable captcha |
-| No confirmation | Users unsure if submitted | Clear success message or redirect |
-| Missing required validation | Incomplete records | Mark essential fields required |
-| No duplicate handling | Multiple records for same person | Enable duplicate check |
 
 ### Troubleshooting Tips
 
@@ -1131,8 +1002,8 @@ Access: Managers only
 
 
 ---
-
-# Module 4: Security & Governance
+# Day 5
+## Module 4: Security & Governance
 
 Access control in Zoho CRM answers two fundamental questions:
 
@@ -1625,8 +1496,8 @@ In this module, you learned about the five components of access control:
 - [Access Control Best Practices](https://help.zoho.com/portal/en/kb/crm/users-and-control)
 - [GDPR and Data Security in Zoho CRM](https://www.zoho.com/crm/gdpr.html)
 
-
-# Module 5: Process Automation
+# Day 6
+## Module 5: Process Automation
 
 ## Learning Objectives
 
@@ -1801,6 +1672,7 @@ A Blueprint consists of:
 
 -----------------------------
 
+# Day 7 and 8
 ## 5.2 Workflows
 
 ### What Are Workflows?
@@ -1998,6 +1870,7 @@ This important setting controls repeat execution:
 - [Workflow Rules & Automation](https://www.youtube.com/watch?v=yg_ECYi4sRg)
 
 ---
+
 
 ## 5.3 Schedules
 
@@ -2722,8 +2595,8 @@ Now that you understand process automation, the next module covers Actions - the
 - [Workflow Best Practices](https://help.zoho.com/portal/en/kb/crm/automation/workflow-rules/articles/workflow-best-practices)
 - [Blueprint Best Practices](https://help.zoho.com/portal/en/kb/crm/automation/blueprint/articles/blueprint-best-practices)
 
-
-# Module 6: Actions - The Execution Layer
+# Day 9
+## Module 6: Actions - The Execution Layer
 
 ## Learning Objectives
 
@@ -3113,6 +2986,7 @@ Action: Remove Tag "Inactive"
 
 ---
 
+# Day 10 and 11
 ## 6.6 Webhooks
 
 ### What Are Webhooks?
@@ -3220,159 +3094,7 @@ Body:
 
 ---
 
-## 6.7 Custom Functions
 
-### What Are Custom Functions?
-
-Custom Functions are Deluge scripts that execute when triggered. They provide unlimited automation possibilities beyond standard actions.
-
-
-### When to Use Custom Functions
-
-Use custom functions when:
-- Standard actions are not sufficient
-- Complex logic is required
-- Cross-module operations needed
-- External API calls required
-- Data manipulation needed
-
-### Basic Deluge Syntax
-
-```deluge
-// Variables
-name = "John";
-count = 10;
-amount = 1500.50;
-
-// Get record
-record = zoho.crm.getRecordById("Deals", dealId);
-dealName = record.get("Deal_Name");
-
-// Update record
-updateMap = Map();
-updateMap.put("Stage", "Closed Won");
-zoho.crm.updateRecord("Deals", dealId, updateMap);
-
-// Send email
-sendmail
-[
-    from: zoho.adminuserid
-    to: "recipient@email.com"
-    subject: "Notification"
-    message: "<p>Your message here</p>"
-];
-
-// Conditional logic
-if(amount > 10000)
-{
-    priority = "High";
-}
-else
-{
-    priority = "Normal";
-}
-
-// Loops
-for each item in listItems
-{
-    info item;
-}
-```
-
-### Example Custom Functions
-
-**Auto-Calculate Total**:
-```deluge
-// Get deal record
-deal = zoho.crm.getRecordById("Deals", dealId);
-
-// Get values
-subtotal = ifnull(deal.get("Subtotal"), 0);
-discount = ifnull(deal.get("Discount"), 0);
-taxRate = 0.18;
-
-// Calculate
-discountedAmount = subtotal - discount;
-tax = discountedAmount * taxRate;
-total = discountedAmount + tax;
-
-// Update record
-updateMap = Map();
-updateMap.put("Tax_Amount", tax);
-updateMap.put("Grand_Total", total);
-zoho.crm.updateRecord("Deals", dealId, updateMap);
-```
-
-**Create Follow-up Record**:
-```deluge
-// Get original deal
-deal = zoho.crm.getRecordById("Deals", dealId);
-
-// Create follow-up task
-taskMap = Map();
-taskMap.put("Subject", "Follow up on " + deal.get("Deal_Name"));
-taskMap.put("Due_Date", zoho.currentdate.addDay(7));
-taskMap.put("Status", "Not Started");
-taskMap.put("Priority", "High");
-taskMap.put("Owner", deal.get("Owner").get("id"));
-taskMap.put("What_Id", dealId);
-
-zoho.crm.createRecord("Tasks", taskMap);
-```
-
-**Send Custom Notification**:
-```deluge
-// Get record details
-deal = zoho.crm.getRecordById("Deals", dealId);
-owner = zoho.crm.getRecordById("Users", deal.get("Owner").get("id"));
-
-// Build message
-subject = "Deal Alert: " + deal.get("Deal_Name");
-message = "<h2>Deal Update</h2>";
-message = message + "<p>Deal: " + deal.get("Deal_Name") + "</p>";
-message = message + "<p>Amount: $" + deal.get("Amount") + "</p>";
-message = message + "<p>Stage: " + deal.get("Stage") + "</p>";
-
-// Send email
-sendmail
-[
-    from: zoho.adminuserid
-    to: owner.get("email")
-    subject: subject
-    message: message
-];
-```
-
-### Creating Custom Functions
-
-1. Go to **Setup** > **Automation** > **Actions** > **Custom Functions**
-2. Click **+ New Function**
-3. Configure:
-   - Function Name
-   - Module (if record-specific)
-   - Arguments
-4. Write Deluge code
-5. Test with sample data
-6. Save
-7. Use in Workflow or Button
-
-### Best Practices
-
-| Do | Don't |
-|----|-------|
-| Handle errors with try-catch | Let errors fail silently |
-| Check for null values | Assume fields have data |
-| Use meaningful variable names | Use cryptic names |
-| Add comments | Write uncommented code |
-| Test thoroughly | Deploy untested code |
-
-### Further Reading
-
-- [Custom Functions](https://help.zoho.com/portal/en/kb/flow/user-guide/create-a-flow/articles/using-custom-functions)
-- [Deluge Reference](https://www.zoho.com/deluge/)
-- [CRM Deluge Tasks](https://www.zoho.com/deluge/help/crm/)
-
----
 
 ## 6.8 Other Actions
 
@@ -3546,8 +3268,8 @@ Proceed to [Module 7: Advanced Features](./07-Advanced-Features.md)
 
 ---
 
-
-# Module 7: Advanced Features
+# Day 12 and 13
+## Module 7: Advanced Features
 
 ## Learning Objectives
 
@@ -4331,8 +4053,8 @@ The final module covers Custom Functions and Deluge Scripting - unlocking unlimi
 Proceed to [Module 8: Custom Functions and Deluge Scripting](./08-Custom-Functions-Deluge.md)
 
 ---
-
-# Module 8: Custom Functions and Deluge Scripting
+# Day 14 and 15
+## Module 8: Custom Functions and Deluge Scripting
 
 ## Learning Objectives
 
@@ -6561,3 +6283,112 @@ data = Map();
 data.put("key", "value");
 value = data.get("key");
 ```
+## 6.7 Custom Functions
+
+### What Are Custom Functions?
+
+Custom Functions are Deluge scripts that execute when triggered. They provide unlimited automation possibilities beyond standard actions.
+
+
+### When to Use Custom Functions
+
+Use custom functions when:
+- Standard actions are not sufficient
+- Complex logic is required
+- Cross-module operations needed
+- External API calls required
+- Data manipulation needed
+
+
+### Example Custom Functions
+
+**Auto-Calculate Total**:
+```deluge
+// Get deal record
+deal = zoho.crm.getRecordById("Deals", dealId);
+
+// Get values
+subtotal = ifnull(deal.get("Subtotal"), 0);
+discount = ifnull(deal.get("Discount"), 0);
+taxRate = 0.18;
+
+// Calculate
+discountedAmount = subtotal - discount;
+tax = discountedAmount * taxRate;
+total = discountedAmount + tax;
+
+// Update record
+updateMap = Map();
+updateMap.put("Tax_Amount", tax);
+updateMap.put("Grand_Total", total);
+zoho.crm.updateRecord("Deals", dealId, updateMap);
+```
+
+**Create Follow-up Record**:
+```deluge
+// Get original deal
+deal = zoho.crm.getRecordById("Deals", dealId);
+
+// Create follow-up task
+taskMap = Map();
+taskMap.put("Subject", "Follow up on " + deal.get("Deal_Name"));
+taskMap.put("Due_Date", zoho.currentdate.addDay(7));
+taskMap.put("Status", "Not Started");
+taskMap.put("Priority", "High");
+taskMap.put("Owner", deal.get("Owner").get("id"));
+taskMap.put("What_Id", dealId);
+
+zoho.crm.createRecord("Tasks", taskMap);
+```
+
+**Send Custom Notification**:
+```deluge
+// Get record details
+deal = zoho.crm.getRecordById("Deals", dealId);
+owner = zoho.crm.getRecordById("Users", deal.get("Owner").get("id"));
+
+// Build message
+subject = "Deal Alert: " + deal.get("Deal_Name");
+message = "<h2>Deal Update</h2>";
+message = message + "<p>Deal: " + deal.get("Deal_Name") + "</p>";
+message = message + "<p>Amount: $" + deal.get("Amount") + "</p>";
+message = message + "<p>Stage: " + deal.get("Stage") + "</p>";
+
+// Send email
+sendmail
+[
+    from: zoho.adminuserid
+    to: owner.get("email")
+    subject: subject
+    message: message
+];
+```
+
+### Creating Custom Functions
+
+1. Go to **Setup** > **Automation** > **Actions** > **Custom Functions**
+2. Click **+ New Function**
+3. Configure:
+   - Function Name
+   - Module (if record-specific)
+   - Arguments
+4. Write Deluge code
+5. Test with sample data
+6. Save
+7. Use in Workflow or Button
+
+### Best Practices
+
+| Do | Don't |
+|----|-------|
+| Handle errors with try-catch | Let errors fail silently |
+| Check for null values | Assume fields have data |
+| Use meaningful variable names | Use cryptic names |
+| Add comments | Write uncommented code |
+| Test thoroughly | Deploy untested code |
+
+### Further Reading
+
+- [Custom Functions](https://help.zoho.com/portal/en/kb/flow/user-guide/create-a-flow/articles/using-custom-functions)
+- [Deluge Reference](https://www.zoho.com/deluge/)
+- [CRM Deluge Tasks](https://www.zoho.com/deluge/help/crm/)
