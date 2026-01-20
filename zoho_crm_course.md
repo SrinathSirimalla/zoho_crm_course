@@ -7,7 +7,7 @@
 
 CRM stands for **Customer Relationship Management**. It is both a strategy and a technology system that businesses use to manage all interactions and relationships with current and potential customers.
 
-### The Business Problem CRM Solves
+### The Business Problem CRM Solves   
 
 Without a CRM system, businesses typically face these challenges:
 
@@ -36,25 +36,22 @@ A CRM system provides:
 ### Further Reading
 
 - [What is CRM? | A guide to CRM software by Zoho CRM](https://www.youtube.com/watch?v=hnEQq7kNFWo)
-- [Introduction to Zoho CRM - Online Help](https://help.zoho.com/portal/en/kb/crm/getting-started)
+- [Introduction to Zoho CRM - Online Help](https://help.zoho.com/portal/en/kb/crm/getting-started/articles/get-started-introduction-zoho-crm)
 
 
 ## Setup CRM Account 
-- Please Setup a zoho crm account. Use the below link
+Please setup a zoho crm account. Use the below links
 - [ How to Use Zoho CRM Free](https://www.youtube.com/watch?v=7i826PTnSqo)
-- Go through the below links
-- [Zoho CRM Home Page Overview](https://help.zoho.com/portal/en/kb/crm/getting-started/articles/home-page)
+Go through the below links
+- [Zoho CRM Home Page Overview](https://help.zoho.com/portal/en/kb/crm/organization-settings/personal-settings/articles/get-started-setup-organization-account)
 - [Understanding the CRM Interface](https://help.zoho.com/portal/en/kb/crm/getting-started/articles/understand-crm-account#Key_CRM_Terminologies)
-
-
-
 
 
 ### Initial Setup and Navigation
 - Objective: Familiarize yourself with the Enterprise interface and personal settings.
 - Access the System: Log in to your Zoho CRM Enterprise account.
 - Locate Setup: Identify the "Setup" icon in the top-right corner. This menu is the command center for all administrative tasks discussed in this course.
-- Personalize: Navigate to Setup > General > Personal Settings. Configure your locale, time zone, and language. This is critical as automation rules often rely on the system time zone.3
+- Personalize: Navigate to Setup > General > Personal Settings. Configure your locale, time zone, and language. This is critical as automation rules often rely on the system time zone.
 - Explore Modules: Click through the standard tabs (Leads, Contacts, Accounts) to observe the default list views.
 
 
@@ -94,7 +91,7 @@ Please go through this link - [Zoho CRM Sandbox Tutorial](https://www.youtube.co
 
 The system generates a custom URL automatically based on your sandbox name. Access follows the format `https://crmsandbox.zoho.com/crm/{sandbox_name}`. A prominent **gold "Sandbox" ribbon** appears at the top of the interface whenever you're working in a test environment, preventing accidental confusion with production.
 
-- From now onwards , Use the sandbox to make changes to your crm account 
+#### From now onwards , Use the sandbox or developer space to make changes to your crm account 
 
 
 ## Module 2: Core Data Components
@@ -117,22 +114,37 @@ The Core Data Components form the foundation of your CRM. Before you can automat
 ---
 ## Modules
 
+### Topics to cover
+- Concept module in zoho crm 
+- Standard and custom modules 
+- Standard modules provided by zoho crm
+- Creating a Custom Modules
+- Linking Modules using Lookup Fields
+
 ### What Are Modules?
 
-Modules are the fundamental building blocks of Zoho CRM. Each module represents a distinct business entity or concept.
+Modules are the fundamental building blocks of Zoho CRM. Each module represents a distinct business entity or concept. 
 
 Think of modules as:
 - **Database analogy**: Tables in a relational database
 - **Business analogy**: Categories of information you need to track
 - **Filing analogy**: Filing cabinets, each dedicated to a type of document
 
+Please go through the below link to understand the concept of modules.
+
+- [What is a module in Zoho CRM](https://help.zoho.com/portal/en/kb/crm/customize-crm-account/customizing-modules/articles/customize-modules)
+- [Custom Modules Tutorial for Zoho CRM](https://zenatta.com/how-to-create-and-use-custom-modules-in-zoho-crm/)
+
+
 ### Types of Modules
 
-- Standard Modules: These come pre-installed and support standard business processes. Key modules include Leads (prospecting), Accounts (business entities), Contacts (people), Deals (sales pipeline), Activities (tasks/calls), and Reports.8
-- Custom Modules: Enterprise accounts allow for the creation of Custom Modules to track unique business entities not covered by standard options. For example, a Real Estate firm might create a "Properties" module, or an Education firm might create "Courses" and "Students".12
-Creating a Custom Module effectively creates a new table in the database, complete with API endpoints, allowing for specialized relationship mapping.
+- Standard Modules: These come pre-installed and support standard business processes. Key modules include Leads (prospecting), Accounts (business entities), Contacts (people), Deals (sales pipeline), Activities (tasks/calls), and Reports.
+- Custom Modules: Enterprise accounts allow for the creation of Custom Modules to track unique business entities not covered by standard options. 
+  - For example, a Real Estate firm might create a "Properties" module
+  - Education firm might create Custom Modules "Courses" and "Students".
+- Creating a Custom Module effectively creates a new table in the database, complete with API endpoints, allowing for specialized relationship mapping.
 
-#### Standard Modules (Pre-built by Zoho)
+#### Example Standard Modules (Pre-built by Zoho)
 
 | Module | Purpose | Typical Records |
 |--------|---------|-----------------|
@@ -146,8 +158,7 @@ Creating a Custom Module effectively creates a new table in the database, comple
 | **Products** | Items you sell | Product catalog |
 | **Cases** | Support tickets | Customer issues |
 
-#### Custom Modules (Created by you)
-
+#### Custom Modules
 Custom modules allow you to track business-specific entities that standard modules do not cover.
 
 **Examples of Custom Modules**:
@@ -157,11 +168,18 @@ Custom modules allow you to track business-specific entities that standard modul
 - **Equipment** (for maintenance tracking)
 - **Training Sessions** (for education providers)
 
-- [What is a module in Zoho CRM](https://help.zoho.com/portal/en/kb/crm/faqs/customization/articles/faqs-modules#What_is_a_module_in_Zoho_CRM)
+
 
 ### Module Relationships (Lookups)
 
 Modules connect to each other through **Lookup Fields**. These create relationships between records in different modules.
+
+Understand the concept of Look up field by going through the below links
+
+- [Lookup field](https://zenatta.com/lookup-fields-tutorial-for-zoho-crm/)
+- [Mastering Module Relationships in Zoho CRM: From One-to-Many to Many-to-Many](https://www.youtube.com/watch?v=CPwu-szIiuA)
+
+
 
 **Common Relationships**:
 
@@ -201,16 +219,6 @@ For each module, you can configure:
 - **Module Permissions**: Who can access this module
 
 
-
-
-### Further Reading
-
-
-- [Modules Overview](https://help.zoho.com/portal/en/kb/crm/modules)
-- [Creating Custom Modules](https://help.zoho.com/portal/en/kb/crm/customization/modules/articles/create-custom-module)
-- [Mastering Module Relationships in Zoho CRM: From One-to-Many to Many-to-Many](https://www.youtube.com/watch?v=CPwu-szIiuA)
-- [Look up field](https://zenatta.com/lookup-fields-tutorial-for-zoho-crm/)
-- [Customizing Modules](https://help.zoho.com/portal/en/kb/crm/customize-crm-account/customizing-modules)
 
 # Day 2
 ## Fields
@@ -355,7 +363,6 @@ Field: Total Revenue
 | Circular formula references | Error, won't save | Plan formula dependencies |
 
 -  [Working with Fields](https://help.zoho.com/portal/en/kb/crm/customize-crm-account/customizing-fields)
-- [Customizing Fields](https://help.zoho.com/portal/en/kb/crm/customize-crm-account/customizing-fields)
 - [How To Add Custom Fields To Zoho CRM](https://www.youtube.com/watch?v=IibYnrSKXSw)
 - [How to Use Formula Fields in Zoho CRM | Step-by-Step Guide
 ](https://www.youtube.com/watch?v=pUfX_aN0Ndg)
@@ -6457,9 +6464,6 @@ Zoho CRM currently supports API version 8 (v8), which offers enhanced features a
 | API Version | Status | Base URL |
 |-------------|--------|----------|
 | V8 | Current | `https://www.zohoapis.com/crm/v8/` |
-| V7 | Supported | `https://www.zohoapis.com/crm/v7/` |
-| V6 | Legacy | `https://www.zohoapis.com/crm/v6/` |
-
 ### API Categories
 
 The Zoho CRM API is organized into several categories:
