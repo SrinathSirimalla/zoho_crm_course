@@ -37,6 +37,7 @@ A CRM system provides:
 
 - [What is CRM? | A guide to CRM software by Zoho CRM](https://www.youtube.com/watch?v=hnEQq7kNFWo)
 - [Introduction to Zoho CRM - Online Help](https://help.zoho.com/portal/en/kb/crm/getting-started/articles/get-started-introduction-zoho-crm)
+- [What is CRM](https://zenatta.com/what-is-crm/)
 
 
 ## Setup CRM Account 
@@ -62,14 +63,10 @@ Go through the below links
 
 Sandbox creates a parallel version of your CRM where teams can safely experiment with configurations. Think of it as a laboratory for your CRM—changes made here affect only the test environment until you explicitly deploy them to production.
 
-**The core problems Sandbox addresses:**
+Zoho offers **two sandbox types**. Configuration-only sandboxes copy your CRM setup without data—ideal for testing layout changes and workflow logic. Configuration-and-data sandboxes include actual records, either **10 sample records per module** or a user-specified subset of production data for realistic testing scenarios. 
 
-- **Risk mitigation**: Untested changes can break workflows, corrupt data, or disrupt sales operations. Sandbox eliminates this risk entirely.
-- **Developer collaboration**: Third-party developers can build and test customizations without ever accessing live customer data.
-- **Quality assurance**: Teams can thoroughly validate complex automations before they touch production records.
-- **Change management**: A unified deployment log tracks every modification pushed to production, creating a complete audit trail.
-
-Zoho offers **two sandbox types**. Configuration-only sandboxes copy your CRM setup without data—ideal for testing layout changes and workflow logic. Configuration-and-data sandboxes include actual records, either **10 sample records per module** or a user-specified subset of production data for realistic testing scenarios.
+Go through the link for creating and understanding sandboxes
+- [Simplify CRM Testing with Zoho CRM Sandbox](https://zenatta.com/zoho-crm-sandbox/)
 
 ### Step-by-step sandbox creation process
 
@@ -1592,6 +1589,11 @@ Think of Blueprints as:
 - A state machine controlling stage transitions
 - A gatekeeper ensuring process compliance
 
+Please go through the below links to understand the concept on blueprints
+- [Blueprint introduction](https://www.zoho.com/crm/tutorials/blueprint/overview.html)
+- [Blueprint Overview](https://help.zoho.com/portal/en/kb/crm/process-management/blueprint)
+- [Zoho Blueprint Explained For Managers and Business Owners](https://www.youtube.com/watch?v=lCwHpT-7fq0)
+
 
 ### Why Use Blueprints?
 
@@ -1714,10 +1716,7 @@ A Blueprint consists of:
 - Verify field update formula
 - Check webhook endpoint
 
-### Further Reading
 
-- [Blueprint Overview](https://help.zoho.com/portal/en/kb/crm/process-management/blueprint)
-- [Zoho Blueprint Explained For Managers and Business Owners](https://www.youtube.com/watch?v=lCwHpT-7fq0)
 
 -----------------------------
 
@@ -1734,6 +1733,9 @@ Think of Workflows as:
 - Background automation engine
 
 **Edition Required**: Standard and above (limited workflows in Free)
+
+Go through the below tutorial for understanding workflows
+- [Workflow Tutorial](https://www.zoho.com/crm/tutorials/workflow/summary.html)
 
 ### Workflow Triggers
 
